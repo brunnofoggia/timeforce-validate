@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html class="dark">
+
+<head>
+    <title>
+        validators.js
+    </title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" media="all" href="/public/stylesheets/normalize.css" />
+    <link rel="stylesheet" media="all" href="../docco.css" />
+    <link rel="stylesheet" media="all" href="../styles/color-modes.css" />
+    <link rel="stylesheet" media="all" href="../styles/design.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="page">
+
+            <div class="header">
+                <small class="color-modes">
+                    <a href="#" class="color-mode dark"
+                        onclick="event.preventDefault(); document.getElementsByTagName('html')[0].classList.add('dark'); document.getElementsByTagName('html')[0].classList.remove('light')">&nbsp;</a>
+                    &nbsp;&nbsp;&nbsp;
+                    <a href="#" class="color-mode light"
+                        onclick="event.preventDefault(); document.getElementsByTagName('html')[0].classList.remove('dark'); document.getElementsByTagName('html')[0].classList.add('light')">&nbsp;</a>
+                </small>
+                
+                                            <h1>
+                                                validators.js
+                                            </h1>
+                                            
+
+                                                
+                                                    <div class="toc">
+                                                        <h3>Table of Contents</h3>
+                                                        <ol>
+                                                            
+                                                                
+                                                                    <li>
+                                                                        <a class="source"
+                                                                            href="validate.html">
+                                                                            src/validate.js
+                                                                        </a>
+                                                                    </li>
+                                                                    
+                                                                
+                                                                    <li>
+                                                                        <a class="source"
+                                                                            href="validators.html">
+                                                                            src/validators.js
+                                                                        </a>
+                                                                    </li>
+                                                                    
+                                                        </ol>
+                                                    </div>
+                                                    
+            </div>
+
+            
+                
+                    
+                        
+                            <div class='highlight'><pre><span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;lodash&#x27;</span>;
+
+<span class="hljs-keyword">var</span> validators = {
+	<span class="hljs-attr">V8N</span>: {
+		<span class="hljs-attr">id</span>: <span class="hljs-number">0</span>,
+		<span class="hljs-title function_">isValid</span>(<span class="hljs-params">validator, validation, value, field, data</span>) {
+			<span class="hljs-keyword">if</span> (!validation.<span class="hljs-title function_">test</span>(value)) {
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+			}
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+		},
+		<span class="hljs-title function_">nonEmptyValidation</span>(<span class="hljs-params">validator</span>) {
+			<span class="hljs-keyword">return</span> validator.<span class="hljs-title function_">passesAnyOf</span>(
+				validator.<span class="hljs-title function_">minLength</span>(<span class="hljs-number">1</span>),
+				validator.<span class="hljs-property">not</span>.<span class="hljs-title function_">undefined</span>().<span class="hljs-property">not</span>.<span class="hljs-title function_">null</span>().<span class="hljs-title function_">pattern</span>(<span class="hljs-regexp">/.+/</span>)
+			);
+		}
+	},
+	<span class="hljs-attr">JOI</span>: {
+		<span class="hljs-attr">id</span>: <span class="hljs-number">1</span>,
+		<span class="hljs-title function_">isValid</span>(<span class="hljs-params">validator, validation, value, field, data</span>) {
+			<span class="hljs-keyword">var</span> schema = {};
+			schema.<span class="hljs-property">__field</span> = validation;
+			<span class="hljs-keyword">var</span> _data = _.<span class="hljs-title function_">defaultsDeep</span>({ <span class="hljs-attr">__field</span>: value }, data);
+			<span class="hljs-keyword">var</span> joiSchema = validator.<span class="hljs-title function_">object</span>(schema);
+
+			<span class="hljs-keyword">var</span> result = validation.<span class="hljs-property">validate</span> ? validation.<span class="hljs-title function_">validate</span>(value, { <span class="hljs-attr">presence</span>: <span class="hljs-string">&#x27;required&#x27;</span> }) : joiSchema.<span class="hljs-title function_">validate</span>(_data, { <span class="hljs-attr">presence</span>: <span class="hljs-string">&#x27;required&#x27;</span>, <span class="hljs-attr">allowUnknown</span>: <span class="hljs-literal">true</span> });
+			<span class="hljs-keyword">if</span> (result.<span class="hljs-property">error</span>) {
+				<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+			}
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+		},
+		<span class="hljs-title function_">nonEmptyValidation</span>(<span class="hljs-params">validator</span>) {
+			<span class="hljs-keyword">var</span> <span class="hljs-title function_">validate</span> = (<span class="hljs-params">value</span>) =&gt; (<span class="hljs-keyword">typeof</span> value === <span class="hljs-string">&#x27;string&#x27;</span> ? validator.<span class="hljs-title function_">string</span>().<span class="hljs-title function_">min</span>(<span class="hljs-number">1</span>) : validator.required()).<span class="hljs-title function_">validate</span>(value, { <span class="hljs-attr">presence</span>: <span class="hljs-string">&#x27;required&#x27;</span> });
+			<span class="hljs-keyword">return</span> { validate };
+		},
+	},
+};
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> validators;</pre></div>
+                                
+                                    
+                                        <div class="fleur">h</div>
+        </div>
+    </div>
+</body>
+
+</html>
